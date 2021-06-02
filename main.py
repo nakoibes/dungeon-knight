@@ -1,9 +1,8 @@
-from application import Application
-from application.config import Config
+from application import Config, Application
 
 
 def main(config_cls=Config):
-    Application("dfigjgfh", config_cls()).run()
+    Application("MyApp", config_cls()).run()
 
 
 if __name__ == '__main__':
