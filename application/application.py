@@ -26,6 +26,7 @@ class Application:
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
+        self.keys_pressed = set()
 
     def config_from_object(self, config: Config):
         self._screen_resolution = config.SCREEN_RESOLUTION
@@ -62,6 +63,13 @@ class Application:
                     self._engine.prev_menu_button()
                 elif event.key == pygame.K_DOWN:
                     self._engine.next_menu_button()
+                elif event.key == 13:#ENTER
+                    self._engine.menu_objects[self._engine.current_button].click(self._engine)
+            # elif event.type == pygame.KEYUP:
+            #     if event.key == pygame.K_UP:
+            #         self._engine.prev_menu_button()
+            #     elif event.key == pygame.K_DOWN:
+            #         self._engine.next_menu_button()
 
     def handle_events(self):
         for event in pygame.event.get():
