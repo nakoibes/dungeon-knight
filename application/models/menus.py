@@ -1,6 +1,6 @@
 from application.config import Config as c
 from application.service import create_sprite
-from application.system_objects.buttons import PlayButton, AutoPlayButton, QuitButton
+from application.models.buttons import PlayButton, AutoPlayButton, QuitButton
 
 __all__ = ["Menus"]
 

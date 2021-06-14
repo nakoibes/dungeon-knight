@@ -10,6 +10,6 @@ class Config: #TODO
     button_pressed_back_color = (46, 139, 87)
     menu_button_width = 200
     menu_button_height = 50
-    menu_texture = "application/textures/menu/menu_background.jpg"
+    menu_texture = "resources/textures/menu/menu_background.jpg"
     font_name = "serif"
-    font_size = 20
+    font_size = 22

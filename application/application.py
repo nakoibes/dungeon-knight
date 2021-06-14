@@ -6,7 +6,7 @@ __all__ = ["Application"]
 from application.config import Config
 from application.engine import Engine
 from application.screen_chain import ScreenHandle, MenuHandler
-from application.system_objects import Menus
+from application.models import Menus
 
 
 class Application:
@@ -63,13 +63,9 @@ class Application:
                     self._engine.prev_menu_button()
                 elif event.key == pygame.K_DOWN:
                     self._engine.next_menu_button()
-                elif event.key == 13:#ENTER
+                elif event.key == pygame.K_RETURN:#ENTER
                     self._engine.menu_objects[self._engine.current_button].click(self._engine)
-            # elif event.type == pygame.KEYUP:
-            #     if event.key == pygame.K_UP:
-            #         self._engine.prev_menu_button()
-            #     elif event.key == pygame.K_DOWN:
-            #         self._engine.next_menu_button()
+
 
     def handle_events(self):
         for event in pygame.event.get():

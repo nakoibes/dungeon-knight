@@ -1,5 +1,5 @@
 import pygame
-from application.system_objects.text_object import TextObject
+from application.models.text_object import TextObject
 from application.config import Config as c
 
 __all__ = ["PlayButton", "AutoPlayButton", "QuitButton"]
