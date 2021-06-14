@@ -24,9 +24,11 @@ class Menus:  # TODO
         self.img = create_sprite(c.menu_texture, c.SCREEN_RESOLUTION)
 
     def create_main_menu(self):
-        buttons = [PlayButton("Играть", self.menu_button_params, (300, 200), state="hover", current=True),
-                   AutoPlayButton("Автоигра", self.menu_button_params, (300, 270)),
-                   QuitButton("Выход", self.menu_button_params, (300, 340))]
+        buttons = [
+            PlayButton("Играть", self.menu_button_params, (300, 200), state="hover", current=True),
+            AutoPlayButton("Автоигра", self.menu_button_params, (300, 270)),
+            QuitButton("Выход", self.menu_button_params, (300, 340)),
+        ]
         self.main_menu_objects.extend(buttons)
         self.current_button = buttons[0]
         for button in buttons:
