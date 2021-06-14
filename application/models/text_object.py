@@ -15,8 +15,10 @@ class TextObject:
 
     def _set_position(self, position, centralized):
         if centralized:
-            return (position[0] + (self.back_size[0] - self.bounds.width) // 2,
-                    position[1] + (self.back_size[1] - self.bounds.height) // 2)
+            return (
+                position[0] + (self.back_size[0] - self.bounds.width) // 2,
+                position[1] + (self.back_size[1] - self.bounds.height) // 2,
+            )
         return position
 
     def _get_surface(self, text):

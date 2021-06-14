@@ -1,7 +1,7 @@
 __all__ = ["Config"]
 
 
-class Config: #TODO
+class Config:  # TODO
     SCREEN_RESOLUTION = (800, 600)
 
     button_text_color = (220, 20, 60)

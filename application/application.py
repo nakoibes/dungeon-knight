@@ -1,5 +1,6 @@
-import pygame
 from collections import defaultdict
+
+import pygame
 
 __all__ = ["Application"]
 
@@ -17,10 +18,7 @@ class Application:
         self._screen_resolution = None
         if config:
             self.config_from_object(config)
-        self._chain = MenuHandler(self._screen_resolution, pygame.SRCALPHA, self._menus, (0, 0),
-                                  ScreenHandle(
-                                      (0, 0)
-                                  ))
+        self._chain = MenuHandler(self._screen_resolution, pygame.SRCALPHA, self._menus, (0, 0), ScreenHandle((0, 0)))
         self._chain.connect_engine(self._engine)
         self._game_display = pygame.display.set_mode(self._screen_resolution)
         self.keydown_handlers = defaultdict(list)
@@ -63,9 +61,8 @@ class Application:
                     self._engine.prev_menu_button()
                 elif event.key == pygame.K_DOWN:
                     self._engine.next_menu_button()
-                elif event.key == pygame.K_RETURN:#ENTER
+                elif event.key == pygame.K_RETURN:  # ENTER
                     self._engine.menu_objects[self._engine.current_button].click(self._engine)
-
 
     def handle_events(self):
         for event in pygame.event.get():
