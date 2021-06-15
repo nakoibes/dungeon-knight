@@ -1,6 +1,6 @@
 import pygame
 
-from application.engine import Engine
+#from application.engine import Engine
 
 __all__ = ["ScreenHandle", "MenuHandler"]
 
@@ -22,7 +22,7 @@ class ScreenHandle(pygame.Surface):
             canvas.blit(self.successor, self.next_coord)
             self.successor.draw(canvas)
 
-    def connect_engine(self, engine: Engine):
+    def connect_engine(self, engine):
         if self.successor is not None:
             self.successor.connect_engine(engine)
 
@@ -33,7 +33,7 @@ class MenuHandler(ScreenHandle):
         args = args[:-3] + args[-2:]
         super().__init__(*args, **kwargs)
 
-    def connect_engine(self, engine: Engine):
+    def connect_engine(self, engine):
         self.engine = engine
         super().connect_engine(engine)
 
