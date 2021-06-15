@@ -1,13 +1,13 @@
 from application.config import Config as c
 from application.service import create_sprite
-from application.models.buttons import PlayButton, AutoPlayButton, QuitButton
+from application.models.buttons import PlayButton, AutoPlayButton, QuitButton, Button
 
 __all__ = ["Menus"]
 
 
 class Menus:  # TODO
     current_menu = "main"
-    main_menu_objects = []
+    main_menu_objects: list[Button] = []
     current_button = None
     show_menu = True
     menu_button_params = (c.menu_button_width, c.menu_button_height)
