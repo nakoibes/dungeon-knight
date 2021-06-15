@@ -21,34 +21,34 @@ class Engine:
             if obj.bounds.collidepoint(pos):
                 if obj.state != "pressed":
                     self.current_button = self.menu_objects.index(obj)
-                    obj.state = "hover"
+                    obj.set_hover_state()
             else:
                 if obj is not self.menu_objects[self.current_button]:
-                    obj.state = "normal"
+                    obj.set_normal_state()
 
     def handle_mouse_down(self, pos):
         for obj in self.menu_objects:
             if obj.bounds.collidepoint(pos):
-                obj.state = "pressed"
+                obj.set_pressed_state()
 
     def handle_mouse_up(self):
         for obj in self.menu_objects:
             if obj.state == "pressed":
                 obj.click(self)
-                obj.state = "hover"
+                obj.set_hover_state()
 
     def prev_menu_button(self):
         self.current_button = (self.current_button - 1) % len(self.menu_objects)
         for obj in self.menu_objects:
             if obj is self.menu_objects[self.current_button]:
-                obj.state = "hover"
+                obj.set_hover_state()
             else:
-                obj.state = "normal"
+                obj.set_normal_state()
 
     def next_menu_button(self):
         self.current_button = (self.current_button + 1) % len(self.menu_objects)
         for obj in self.menu_objects:
             if obj is self.menu_objects[self.current_button]:
-                obj.state = "hover"
+                obj.set_hover_state()
             else:
-                obj.state = "normal"
+                obj.set_normal_state()

@@ -25,7 +25,7 @@ class Menus:  # TODO
 
     def create_main_menu(self):
         buttons = [
-            PlayButton("Играть", self.menu_button_params, (300, 200), state="hover", current=True),
+            PlayButton("Играть", self.menu_button_params, (300, 200), state="hover"),
             AutoPlayButton("Автоигра", self.menu_button_params, (300, 270)),
             QuitButton("Выход", self.menu_button_params, (300, 340)),
         ]

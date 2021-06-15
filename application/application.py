@@ -55,10 +55,10 @@ class Application:
                 elif event.key == pygame.K_DOWN:
                     self._engine.next_menu_button()
                 elif event.key == pygame.K_RETURN:
-                    self._engine.menu_objects[self._engine.current_button].state = "pressed"  # FIXME
+                    self._engine.menu_objects[self._engine.current_button].set_pressed_state()
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_RETURN:
-                    self._engine.menu_objects[self._engine.current_button].state = "hover"
+                    self._engine.menu_objects[self._engine.current_button].set_hover_state()
                     self._engine.menu_objects[self._engine.current_button].click(self._engine)
 
     def handle_events(self):
