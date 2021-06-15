@@ -2,7 +2,7 @@ import pygame
 from application.models.text_object import TextObject
 from application.config import Config as c
 
-__all__ = ["PlayButton", "AutoPlayButton", "QuitButton"]
+__all__ = ["PlayButton", "AutoPlayButton", "QuitButton", "Button"]
 
 
 class Button:

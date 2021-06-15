@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 import pygame
 
 __all__ = ["Application"]
@@ -15,16 +13,12 @@ class Application:
         self._name = name
         self._engine = Engine()
         self._menus = Menus(self._engine)
-        self._screen_resolution = None
+        self._screen_resolution = (0, 0)
         if config:
             self.config_from_object(config)
         self._chain = MenuHandler(self._screen_resolution, pygame.SRCALPHA, self._menus, (0, 0), ScreenHandle((0, 0)))
         self._chain.connect_engine(self._engine)
         self._game_display = pygame.display.set_mode(self._screen_resolution)
-        self.keydown_handlers = defaultdict(list)
-        self.keyup_handlers = defaultdict(list)
-        self.mouse_handlers = []
-        self.keys_pressed = set()
 
     def config_from_object(self, config: Config):
         self._screen_resolution = config.SCREEN_RESOLUTION
@@ -41,7 +35,6 @@ class Application:
 
     def create_objects(self):
         self._menus.create_menus()
-        # self._engine.current_button = self._engine.menu_objects[0]
 
     def handle_mouse_event(self, event):
         if event.type == pygame.MOUSEMOTION:
@@ -61,7 +54,11 @@ class Application:
                     self._engine.prev_menu_button()
                 elif event.key == pygame.K_DOWN:
                     self._engine.next_menu_button()
-                elif event.key == pygame.K_RETURN:  # ENTER
+                elif event.key == pygame.K_RETURN:
+                    self._engine.menu_objects[self._engine.current_button].state = "pressed"  # FIXME
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_RETURN:
+                    self._engine.menu_objects[self._engine.current_button].state = "hover"
                     self._engine.menu_objects[self._engine.current_button].click(self._engine)
 
     def handle_events(self):

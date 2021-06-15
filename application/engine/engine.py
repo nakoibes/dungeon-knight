@@ -1,11 +1,12 @@
 __all__ = ["Engine"]
 
+from application.models.buttons import Button
+
 
 class Engine:
     game_over = False
     show_menu = True
-    objects = []
-    menu_objects = []
+    menu_objects: list[Button] = []
     current_button = None
 
     def subscribe_button(self, obj):
