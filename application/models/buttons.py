@@ -6,15 +6,23 @@ __all__ = ["PlayButton", "AutoPlayButton", "QuitButton", "Button"]
 
 
 class Button:
-    def __init__(self, text, params, position, state="normal", current=False):
+    def __init__(self, text, params, position, state="normal"):
         self.bounds = pygame.rect.Rect(position[0], position[1], params[0], params[1])
         self.position = position
         self.text = TextObject(
             position, lambda: text, c.button_text_color, c.font_name, c.font_size, params, centralized=True
         )
-        # self.current = current
         self.state = state
         self.params = params
+
+    def set_normal_state(self):
+        self.state = "normal"
+
+    def set_hover_state(self):
+        self.state = "hover"
+
+    def set_pressed_state(self):
+        self.state = "pressed"
 
     @property
     def back_color(self):
@@ -31,12 +39,12 @@ class Button:
 
 
 class QuitButton(Button):
-    def click(self, engine):
-        engine.game_over = True
+    def click(self, state):
+        state.session.set_state(state.session.get_game_over_state())
 
 
 class PlayButton(Button):
-    def click(self, engine):
+    def click(self, game_session):
         pass
 
 

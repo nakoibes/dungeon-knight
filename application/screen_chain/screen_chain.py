@@ -46,8 +46,7 @@ class MenuHandler(ScreenHandle):
             self.blit(obj.text.text_surface, obj.text.position)
 
     def draw(self, canvas: pygame.Surface):
-        if self.engine.show_menu:
-            self.draw_background()
-            self.draw_buttons()
+        self.draw_background()
+        self.draw_buttons()
 
         super().draw(canvas)

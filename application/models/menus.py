@@ -12,8 +12,8 @@ class Menus:  # TODO
     show_menu = True
     menu_button_params = (c.menu_button_width, c.menu_button_height)
 
-    def __init__(self, engine):
-        self._engine = engine
+    def __init__(self):
+        self.session = None
         self.img = None
 
     def create_menus(self):
@@ -25,12 +25,10 @@ class Menus:  # TODO
 
     def create_main_menu(self):
         buttons = [
-            PlayButton("Играть", self.menu_button_params, (300, 200), state="hover", current=True),
+            PlayButton("Играть", self.menu_button_params, (300, 200), state="hover"),
             AutoPlayButton("Автоигра", self.menu_button_params, (300, 270)),
             QuitButton("Выход", self.menu_button_params, (300, 340)),
         ]
         self.main_menu_objects.extend(buttons)
-        self.current_button = buttons[0]
-        for button in buttons:
-            self._engine.subscribe_button(button)
-        self._engine.current_button = 0
+        self.current_button = 0
+
