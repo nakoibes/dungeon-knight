@@ -9,7 +9,6 @@ from application.models import Menus
 from application.vocabulary import KEYBOARD_MAPPING, MOUSE_MAPPING
 
 
-
 class Application:
     def __init__(self, name: str, config: Config):
         self.pygame_mouse_buttons_dict = MOUSE_MAPPING
