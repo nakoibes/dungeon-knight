@@ -6,11 +6,14 @@ from application.config import Config
 from application.game_session import GameSession
 from application.screen_chain import ScreenHandle, MenuHandler
 from application.models import Menus
+from application.vocabulary import KEYBOARD_MAPPING, MOUSE_MAPPING
 
 
+# TODO клавиши без функций
 class Application:
     def __init__(self, name: str, config: Config):
-
+        self.pygame_mouse_buttons_dict = MOUSE_MAPPING
+        self.pygame_keyboard_keys_dict = KEYBOARD_MAPPING
         self._name = name
         self._menus = Menus()
         self._screen_resolution = (0, 0)
@@ -20,9 +23,7 @@ class Application:
             self._screen_resolution, pygame.SRCALPHA, self._menus, (0, 0), ScreenHandle((0, 0))
         )
         self._game_session = GameSession(self.menu_chain, self._menus)
-        #self.menu_chain.connect_engine(self._game_session)
         self._game_display = pygame.display.set_mode(self._screen_resolution)
-        #self._menus.session = self._game_session
 
     def config_from_object(self, config: Config):
         self._screen_resolution = config.SCREEN_RESOLUTION
@@ -41,36 +42,22 @@ class Application:
         self._menus.create_menus()
 
     def handle_mouse_event(self, event):
-        if event.type == pygame.MOUSEMOTION:
-            self._game_session.state.handle_mouse_move(event.pos)
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            self._game_session.state.handle_mouse_down(event.pos)
-        elif event.type == pygame.MOUSEBUTTONUP:
-            self._game_session.state.handle_mouse_up()
+        self._game_session.handle_mouse(self.pygame_mouse_buttons_dict.get(event.type), event.pos)
 
-    def handle_key_event(self, event):
+    def handle_keyboard_key_event(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                self._game_session.state.handle_key_up()
-            elif event.key == pygame.K_DOWN:
-                self._game_session.state.handle_key_down()
-            elif event.key == pygame.K_RETURN:
-                self._game_session.menus.main_menu_objects[self._game_session.menus.current_button].set_pressed_state()
+            self._game_session.handle_keyboard_key(self.pygame_keyboard_keys_dict.get(event.key), "down")
         elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_RETURN:
-                self._game_session.menus.main_menu_objects[self._game_session.menus.current_button].set_hover_state()
-                self._game_session.menus.main_menu_objects[self._game_session.menus.current_button].click(
-                    self._game_session.state
-                )
+            self._game_session.handle_keyboard_key(self.pygame_keyboard_keys_dict.get(event.key), "up")
 
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self._game_session.state.handle_esc()
-            elif event.type in (pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION):
+                self._game_session.finish()
+            elif event.type in self.pygame_mouse_buttons_dict.keys():
                 self.handle_mouse_event(event)
-            elif event.type in (pygame.KEYDOWN, pygame.KEYUP):
-                self.handle_key_event(event)
+            elif event.type in (pygame.KEYUP, pygame.KEYDOWN):
+                self.handle_keyboard_key_event(event)
 
     def run(self):
         self.open()
