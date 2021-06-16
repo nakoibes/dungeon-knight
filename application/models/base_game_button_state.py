@@ -22,13 +22,6 @@ class AbstractButtonState(metaclass=ABCMeta):
     def remove_current(self):
         pass
 
-    # @abstractmethod
-    # def keyboard_down(self):
-    #     pass
-    # @abstractmethod
-    # def keyboard_up(self):
-    #     pass
-
     @abstractmethod
     def press_return(self):
         pass

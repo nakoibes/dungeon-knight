@@ -106,12 +106,6 @@ class NormalState(AbstractButtonState):
     def remove_current(self):
         pass
 
-    def keyboard_down(self):
-        pass
-
-    def keyboard_up(self):
-        pass
-
     def press_return(self):
         pass
 
