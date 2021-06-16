@@ -1,11 +1,12 @@
 import pygame
 from application.models.text_object import TextObject
 from application.config import Config as c
+from abc import abstractmethod, ABCMeta
 
 __all__ = ["PlayButton", "AutoPlayButton", "QuitButton", "Button"]
 
 
-class Button:
+class Button(metaclass=ABCMeta):
     def __init__(self, text, params, position, state="normal"):
         self.bounds = pygame.rect.Rect(position[0], position[1], params[0], params[1])
         self.position = position
@@ -30,7 +31,8 @@ class Button:
             normal=c.button_normal_back_color, hover=c.button_hover_back_color, pressed=c.button_pressed_back_color
         )[self.state]
 
-    def click(self, engine):
+    @abstractmethod
+    def click(self, state):
         pass
 
     # def _get_surface(self, text):
@@ -40,14 +42,14 @@ class Button:
 
 class QuitButton(Button):
     def click(self, state):
-        state.session.set_state(state.session.get_game_over_state())
+        state.session.end = True
 
 
 class PlayButton(Button):
-    def click(self, game_session):
+    def click(self, state):
         pass
 
 
 class AutoPlayButton(Button):
-    def click(self, engine):
+    def click(self, state):
         pass

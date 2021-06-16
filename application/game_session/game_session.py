@@ -1,16 +1,15 @@
-from abc import ABCMeta, abstractmethod
+__all__ = ["ShowMenuState", "OnPlayState", "GameSession"]
 
-
-# __all__ = ["Engine", "GameSession"]
+from application.game_session.base_state import AbstractState
 
 
 class GameSession:
     def __init__(self, menu_chain, menus):
         self.show_menu_state = ShowMenuState(self, menu_chain)
         self.on_play_state = OnPlayState()
-        self.game_over_state = GameOverState(self)
         self.state = self.show_menu_state
         self.menus = menus
+        self.end = False
 
     def handle_esc(self):
         self.state.handle_esc()
@@ -23,19 +22,6 @@ class GameSession:
 
     def get_on_play_state(self):
         return self.on_play_state
-
-    def get_game_over_state(self):
-        return self.game_over_state
-
-
-class AbstractState(metaclass=ABCMeta):
-    @abstractmethod
-    def draw(self, display):
-        pass
-
-    @abstractmethod
-    def handle_esc(self):
-        pass
 
 
 class ShowMenuState(AbstractState):
@@ -95,26 +81,15 @@ class ShowMenuState(AbstractState):
             else:
                 obj.set_normal_state()
 
+    def handle_key_left(self):
+        pass
+
+    def handle_key_right(self):
+        pass
+
 
 class OnPlayState(AbstractState):
     state = "OnPlay"
-
-    # def __init__(self, chain):
-    #     self._chain = chain
-
-    def draw(self, display):
-        pass
-
-    def handle_esc(self):
-        pass
-
-
-class GameOverState(AbstractState):
-    state = "End"
-
-    def __init__(self, session):
-        self._chain = None
-        self.session = session
 
     def draw(self, display):
         pass
@@ -123,4 +98,25 @@ class GameOverState(AbstractState):
         pass
 
     def get_chain(self):
+        pass
+
+    def handle_mouse_move(self, pos):
+        pass
+
+    def handle_mouse_down(self, pos):
+        pass
+
+    def handle_mouse_up(self):
+        pass
+
+    def handle_key_up(self):
+        pass
+
+    def handle_key_down(self):
+        pass
+
+    def handle_key_left(self):
+        pass
+
+    def handle_key_right(self):
         pass

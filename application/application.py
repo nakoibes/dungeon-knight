@@ -3,7 +3,7 @@ import pygame
 __all__ = ["Application"]
 
 from application.config import Config
-from application.engine import GameSession
+from application.game_session import GameSession
 from application.screen_chain import ScreenHandle, MenuHandler
 from application.models import Menus
 
@@ -20,9 +20,9 @@ class Application:
             self._screen_resolution, pygame.SRCALPHA, self._menus, (0, 0), ScreenHandle((0, 0))
         )
         self._game_session = GameSession(self.menu_chain, self._menus)
-        self.menu_chain.connect_engine(self._game_session)
+        #self.menu_chain.connect_engine(self._game_session)
         self._game_display = pygame.display.set_mode(self._screen_resolution)
-        self._menus.session = self._game_session
+        #self._menus.session = self._game_session
 
     def config_from_object(self, config: Config):
         self._screen_resolution = config.SCREEN_RESOLUTION
@@ -75,7 +75,7 @@ class Application:
     def run(self):
         self.open()
         self.create_objects()
-        while self._game_session.state.state != "End":
+        while not self._game_session.end:
             self._game_display.blit(self._game_session.state.get_chain(), (0, 0))
             self._game_session.state.draw(self._game_display)
             pygame.display.update()

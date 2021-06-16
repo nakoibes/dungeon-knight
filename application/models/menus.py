@@ -13,7 +13,6 @@ class Menus:  # TODO
     menu_button_params = (c.menu_button_width, c.menu_button_height)
 
     def __init__(self):
-        self.session = None
         self.img = None
 
     def create_menus(self):
