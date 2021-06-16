@@ -77,7 +77,8 @@ class ShowMenuState(AbstractState):
 
     def handle_key_up(self):
         self.session.menus.current_button = (self.session.menus.current_button - 1) % len(
-            self.session.menus.main_menu_objects)
+            self.session.menus.main_menu_objects
+        )
         for obj in self.session.menus.main_menu_objects:
             if obj is self.session.menus.main_menu_objects[self.session.menus.current_button]:
                 obj.set_hover_state()
@@ -86,7 +87,8 @@ class ShowMenuState(AbstractState):
 
     def handle_key_down(self):
         self.session.menus.current_button = (self.session.menus.current_button + 1) % len(
-            self.session.menus.main_menu_objects)
+            self.session.menus.main_menu_objects
+        )
         for obj in self.session.menus.main_menu_objects:
             if obj is self.session.menus.main_menu_objects[self.session.menus.current_button]:
                 obj.set_hover_state()

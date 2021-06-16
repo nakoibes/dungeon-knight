@@ -31,4 +31,3 @@ class Menus:  # TODO
         ]
         self.main_menu_objects.extend(buttons)
         self.current_button = 0
-

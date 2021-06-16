@@ -16,8 +16,9 @@ class Application:
         self._screen_resolution = (0, 0)
         if config:
             self.config_from_object(config)
-        self.menu_chain = MenuHandler(self._screen_resolution, pygame.SRCALPHA, self._menus, (0, 0),
-                                      ScreenHandle((0, 0)))
+        self.menu_chain = MenuHandler(
+            self._screen_resolution, pygame.SRCALPHA, self._menus, (0, 0), ScreenHandle((0, 0))
+        )
         self._game_session = GameSession(self.menu_chain, self._menus)
         self.menu_chain.connect_engine(self._game_session)
         self._game_display = pygame.display.set_mode(self._screen_resolution)
@@ -59,7 +60,8 @@ class Application:
             if event.key == pygame.K_RETURN:
                 self._game_session.menus.main_menu_objects[self._game_session.menus.current_button].set_hover_state()
                 self._game_session.menus.main_menu_objects[self._game_session.menus.current_button].click(
-                    self._game_session.state)
+                    self._game_session.state
+                )
 
     def handle_events(self):
         for event in pygame.event.get():
