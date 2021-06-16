@@ -23,6 +23,7 @@ class Application:
             self._screen_resolution, pygame.SRCALPHA, self._menus, (0, 0), ScreenHandle((0, 0))
         )
         self._game_session = GameSession(self.menu_chain, self._menus)
+        self._menus.set_game_session(self._game_session)
         self._game_display = pygame.display.set_mode(self._screen_resolution)
 
     def config_from_object(self, config: Config):
@@ -46,9 +47,9 @@ class Application:
 
     def handle_keyboard_key_event(self, event):
         if event.type == pygame.KEYDOWN:
-            self._game_session.handle_keyboard_key(self.pygame_keyboard_keys_dict.get(event.key), "down")
+            self._game_session.handle_keyboard_key(self.pygame_keyboard_keys_dict.get(event.key, "no_key"), "down")
         elif event.type == pygame.KEYUP:
-            self._game_session.handle_keyboard_key(self.pygame_keyboard_keys_dict.get(event.key), "up")
+            self._game_session.handle_keyboard_key(self.pygame_keyboard_keys_dict.get(event.key, "no_key"), "up")
 
     def handle_events(self):
         for event in pygame.event.get():

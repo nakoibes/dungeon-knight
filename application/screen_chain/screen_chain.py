@@ -32,7 +32,7 @@ class MenuHandler(ScreenHandle):
 
     def draw_buttons(self):
         for obj in self.menus.main_menu_objects:
-            pygame.draw.rect(self, obj.back_color, (obj.position[0], obj.position[1], obj.params[0], obj.params[1]))
+            pygame.draw.rect(self, obj.state.color, (obj.position[0], obj.position[1], obj.params[0], obj.params[1]))
             self.blit(obj.text.text_surface, obj.text.position)
 
     def draw(self, canvas: pygame.Surface):

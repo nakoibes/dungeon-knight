@@ -49,7 +49,7 @@ class ShowMenuGameSessionState(AbstractGameSessionState):
         }
 
     def handle_keyboard_key(self, key, status):
-        self.key_dict.get(key, lambda: None)(status)
+        self.key_dict.get(key, lambda x: None)(status)
 
     def handle_mouse(self, key, pos):
         self.mouse_dict.get(key)(pos)
@@ -57,9 +57,9 @@ class ShowMenuGameSessionState(AbstractGameSessionState):
     def handle_return(self, status):
         if status == "up":
             self.session.menus.main_menu_objects[self.session.menus.current_button].click(self)
-            self.session.menus.main_menu_objects[self.session.menus.current_button].set_hover_state()
+            self.session.menus.main_menu_objects[self.session.menus.current_button].free()
         elif status == "down":
-            self.session.menus.main_menu_objects[self.session.menus.current_button].set_pressed_state()
+            self.session.menus.main_menu_objects[self.session.menus.current_button].press_return()
 
     def draw(self, display):
         self._chain.draw(display)
@@ -74,45 +74,39 @@ class ShowMenuGameSessionState(AbstractGameSessionState):
     def handle_mouse_move(self, pos):
         for obj in self.session.menus.main_menu_objects:
             if obj.bounds.collidepoint(pos):
-                if obj.state != "pressed":
-                    self.session.menus.current_button = self.session.menus.main_menu_objects.index(obj)
-                    obj.set_hover_state()
+                obj.hover()
+                self.session.menus.remove_current_button()
             else:
-                if obj is not self.session.menus.main_menu_objects[self.session.menus.current_button]:
-                    obj.set_normal_state()
+                obj.remove()
 
     def handle_mouse_down(self, pos):
         for obj in self.session.menus.main_menu_objects:
             if obj.bounds.collidepoint(pos):
-                obj.set_pressed_state()
+                obj.press()
 
     def handle_mouse_up(self, pos):
         for obj in self.session.menus.main_menu_objects:
-            if obj.state == "pressed":
-                obj.click(self)
-                obj.set_hover_state()
+            obj.free()
 
     def handle_key_up(self, status):
+        length = len(self.session.menus.main_menu_objects)
         if status == "down":
-            self.session.menus.current_button = (self.session.menus.current_button - 1) % len(
-                self.session.menus.main_menu_objects
-            )
-            for obj in self.session.menus.main_menu_objects:
-                if obj is self.session.menus.main_menu_objects[self.session.menus.current_button]:
-                    obj.set_hover_state()
-                else:
-                    obj.set_normal_state()
+            prev = (self.session.menus.current_button - 1) % length
+            obj = self.session.menus.main_menu_objects[self.session.menus.current_button]
+            obj.remove()
+            obj.remove_current()
+            self.session.menus.main_menu_objects[prev].hover()
+            self.session.menus.current_button = prev
 
     def handle_key_down(self, status):
+        length = len(self.session.menus.main_menu_objects)
         if status == "down":
-            self.session.menus.current_button = (self.session.menus.current_button + 1) % len(
-                self.session.menus.main_menu_objects
-            )
-            for obj in self.session.menus.main_menu_objects:
-                if obj is self.session.menus.main_menu_objects[self.session.menus.current_button]:
-                    obj.set_hover_state()
-                else:
-                    obj.set_normal_state()
+            next_ = (self.session.menus.current_button + 1) % length
+            obj = self.session.menus.main_menu_objects[self.session.menus.current_button]
+            obj.remove()
+            obj.remove_current()
+            self.session.menus.main_menu_objects[next_].hover()
+            self.session.menus.current_button = next_
 
 
 class OnPlayGameSessionState(AbstractGameSessionState):
