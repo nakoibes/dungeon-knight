@@ -86,6 +86,26 @@ class AutoPlayButton(Button):
         pass
 
 
+class ContinueButton(Button):
+    def click(self, state: AbstractGameSessionState):
+        pass
+
+
+class RestartButton(Button):
+    def click(self, state: AbstractGameSessionState):
+        pass
+
+
+class HelpButton(Button):
+    def click(self, state: AbstractGameSessionState):
+        pass
+
+
+class MainMenuButton(Button):
+    def click(self, state: AbstractGameSessionState):
+        pass
+
+
 class NormalState(AbstractButtonState):
     def __init__(self, button: Button):
         self.color = c.button_normal_back_color
