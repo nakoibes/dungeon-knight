@@ -36,8 +36,6 @@ class GameSession:
 
 
 class ShowMenuGameSessionState(AbstractGameSessionState):
-    state = "ShowMenu"
-
     def __init__(self, session: GameSession, chain: ScreenHandler):
         self._chain = chain
         self.mouse_dict: dict[str, Callable[[tuple[int]], None]] = {
@@ -61,10 +59,10 @@ class ShowMenuGameSessionState(AbstractGameSessionState):
 
     def handle_return(self, status: str):
         if status == "up":
-            self.session.menus.main_menu_objects[self.session.menus.current_button].click(self)
-            self.session.menus.main_menu_objects[self.session.menus.current_button].free()
+            self.session.menus.current_buttons[self.session.menus.current_button].click(self)
+            self.session.menus.current_buttons[self.session.menus.current_button].free()
         elif status == "down":
-            self.session.menus.main_menu_objects[self.session.menus.current_button].press_return()
+            self.session.menus.current_buttons[self.session.menus.current_button].press_return()
 
     def draw(self, display: pygame.Surface):
         self._chain.draw(display)
@@ -77,7 +75,7 @@ class ShowMenuGameSessionState(AbstractGameSessionState):
             self.session.finish()
 
     def handle_mouse_move(self, pos: tuple[int]):
-        for obj in self.session.menus.main_menu_objects:
+        for obj in self.session.menus.current_buttons:
             if obj.bounds.collidepoint(pos):
                 obj.hover()
                 self.session.menus.remove_current_button()
@@ -85,32 +83,32 @@ class ShowMenuGameSessionState(AbstractGameSessionState):
                 obj.remove()
 
     def handle_mouse_down(self, pos: tuple[int]):
-        for obj in self.session.menus.main_menu_objects:
+        for obj in self.session.menus.current_buttons:
             if obj.bounds.collidepoint(pos):
                 obj.press()
 
     def handle_mouse_up(self, pos: tuple[int]):
-        for obj in self.session.menus.main_menu_objects:
+        for obj in self.session.menus.current_buttons:
             obj.free()
 
     def handle_key_up(self, status: str):
-        length = len(self.session.menus.main_menu_objects)
+        length = len(self.session.menus.current_buttons)
         if status == "down":
             prev = (self.session.menus.current_button - 1) % length
-            obj = self.session.menus.main_menu_objects[self.session.menus.current_button]
+            obj = self.session.menus.current_buttons[self.session.menus.current_button]
             obj.remove()
             obj.remove_current()
-            self.session.menus.main_menu_objects[prev].hover()
+            self.session.menus.current_buttons[prev].hover()
             self.session.menus.current_button = prev
 
     def handle_key_down(self, status: str):
-        length = len(self.session.menus.main_menu_objects)
+        length = len(self.session.menus.current_buttons)
         if status == "down":
             next_ = (self.session.menus.current_button + 1) % length
-            obj = self.session.menus.main_menu_objects[self.session.menus.current_button]
+            obj = self.session.menus.current_buttons[self.session.menus.current_button]
             obj.remove()
             obj.remove_current()
-            self.session.menus.main_menu_objects[next_].hover()
+            self.session.menus.current_buttons[next_].hover()
             self.session.menus.current_button = next_
 
 

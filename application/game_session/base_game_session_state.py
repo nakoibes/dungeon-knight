@@ -16,3 +16,7 @@ class AbstractGameSessionState(metaclass=ABCMeta):
     @abstractmethod
     def handle_mouse(self, key, pos):
         pass
+
+    @abstractmethod
+    def get_chain(self):
+        pass

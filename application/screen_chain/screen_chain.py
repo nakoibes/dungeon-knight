@@ -28,10 +28,10 @@ class MenuHandler(ScreenHandler):
         super().__init__(*args, **kwargs)
 
     def draw_background(self):
-        self.blit(self.menus.img, (0, 0))
+        self.blit(self.menus.state.img, (0, 0))
 
     def draw_buttons(self):
-        for obj in self.menus.main_menu_objects:
+        for obj in self.menus.current_buttons:
             pygame.draw.rect(self, obj.state.color, (obj.position[0], obj.position[1], obj.params[0], obj.params[1]))
             self.blit(obj.text.text_surface, obj.text.position)
 

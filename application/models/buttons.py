@@ -117,7 +117,7 @@ class NormalState(AbstractButtonState):
     def hover(self):
         self.button.set_state(self.button.get_hover_state())
         self.button.menu.remove_current_button()
-        self.button.menu.current_button = self.button.menu.main_menu_objects.index(self.button)
+        self.button.menu.current_button = self.button.menu.buttons.index(self.button)
 
     def remove(self):
         pass
