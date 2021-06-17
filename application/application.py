@@ -4,7 +4,7 @@ __all__ = ["Application"]
 
 from application.config import Config
 from application.game_session import GameSession
-from application.screen_chain import ScreenHandle, MenuHandler
+from application.screen_chain import ScreenHandler, MenuHandler
 from application.models import Menus
 from application.vocabulary import KEYBOARD_MAPPING, MOUSE_MAPPING
 
@@ -19,7 +19,7 @@ class Application:
         if config:
             self.config_from_object(config)
         self.menu_chain = MenuHandler(
-            self._screen_resolution, pygame.SRCALPHA, self._menus, (0, 0), ScreenHandle((0, 0))
+            self._screen_resolution, pygame.SRCALPHA, self._menus, (0, 0), ScreenHandler((0, 0))
         )
         self._game_session = GameSession(self.menu_chain, self._menus)
         self._menus.set_game_session(self._game_session)
@@ -44,7 +44,7 @@ class Application:
     def handle_mouse_event(self, event):
         self._game_session.handle_mouse(self.pygame_mouse_buttons_dict.get(event.type), event.pos)
 
-    def handle_keyboard_key_event(self, event):
+    def handle_keyboard_key_event(self, event: pygame.event.Event):
         if event.type == pygame.KEYDOWN:
             self._game_session.handle_keyboard_key(self.pygame_keyboard_keys_dict.get(event.key, "no_key"), "down")
         elif event.type == pygame.KEYUP:

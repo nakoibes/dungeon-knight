@@ -1,4 +1,6 @@
 import pygame
+
+from application.game_session.base_game_session_state import AbstractGameSessionState
 from application.models.text_object import TextObject
 from application.config import Config as c
 from abc import abstractmethod, ABCMeta
@@ -34,7 +36,7 @@ class Button(metaclass=ABCMeta):
     def get_current_state(self):
         return self.current_state
 
-    def set_state(self, state):
+    def set_state(self, state: AbstractButtonState):
         self.state = state
 
     def press(self):
@@ -55,13 +57,13 @@ class Button(metaclass=ABCMeta):
     def press_return(self):
         self.state.press_return()
 
-    def init_state(self, state):
+    def init_state(self, state: str):
         return dict(
             normal=self.normal_state, hover=self.hover_state, pressed=self.pressed_state, current=self.current_state
         )[state]
 
     @abstractmethod
-    def click(self, state):
+    def click(self, state: AbstractGameSessionState):
         pass
 
     # def _get_surface(self, text):
@@ -70,7 +72,7 @@ class Button(metaclass=ABCMeta):
 
 
 class QuitButton(Button):
-    def click(self, state):
+    def click(self, state: AbstractGameSessionState):
         state.session.finish()
 
 
@@ -85,9 +87,9 @@ class AutoPlayButton(Button):
 
 
 class NormalState(AbstractButtonState):
-    def __init__(self, button):
+    def __init__(self, button: Button):
         self.color = c.button_normal_back_color
-        self.button = button
+        super().__init__(button)
 
     def press(self):
         pass
@@ -111,9 +113,9 @@ class NormalState(AbstractButtonState):
 
 
 class HoverState(AbstractButtonState):
-    def __init__(self, button):
+    def __init__(self, button: Button):
         self.color = c.button_hover_back_color
-        self.button = button
+        super(HoverState, self).__init__(button)
 
     def press(self):
         self.button.set_state(self.button.get_pressed_state())
@@ -135,9 +137,9 @@ class HoverState(AbstractButtonState):
 
 
 class PressedState(AbstractButtonState):
-    def __init__(self, button):
+    def __init__(self, button: Button):
         self.color = c.button_pressed_back_color
-        self.button = button
+        super(PressedState, self).__init__(button)
 
     def press(self):
         pass
@@ -160,9 +162,9 @@ class PressedState(AbstractButtonState):
 
 
 class CurrentButtonState(AbstractButtonState):
-    def __init__(self, button):
+    def __init__(self, button: Button):
         self.color = c.button_hover_back_color
-        self.button = button
+        super(CurrentButtonState, self).__init__(button)
 
     def press(self):
         pass

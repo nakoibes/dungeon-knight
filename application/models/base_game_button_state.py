@@ -1,7 +1,12 @@
 from abc import ABCMeta, abstractmethod
 
+# from application.game_session import GameSession
+
 
 class AbstractButtonState(metaclass=ABCMeta):
+    def __init__(self, button):
+        self.button = button
+
     @abstractmethod
     def press(self):
         pass
