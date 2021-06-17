@@ -1,9 +1,9 @@
 import pygame
 
-__all__ = ["ScreenHandle", "MenuHandler"]
+__all__ = ["ScreenHandler", "MenuHandler"]
 
 
-class ScreenHandle(pygame.Surface):
+class ScreenHandler(pygame.Surface):
     def __init__(self, *args, **kwargs):
         self.engine = None
         if len(args) > 1:
@@ -21,7 +21,7 @@ class ScreenHandle(pygame.Surface):
             self.successor.draw(canvas)
 
 
-class MenuHandler(ScreenHandle):
+class MenuHandler(ScreenHandler):
     def __init__(self, *args, **kwargs):
         self.menus = args[-3]
         args = args[:-3] + args[-2:]
