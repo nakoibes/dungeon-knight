@@ -1,6 +1,5 @@
 from application.config import Config as c
 
-
 from application.service import create_sprite
 from application.models.buttons import PlayButton, AutoPlayButton, QuitButton, Button
 
@@ -8,7 +7,7 @@ __all__ = ["Menus"]
 
 
 class Menus:
-    #menu_button_params = (c.menu_button_width, c.menu_button_height)
+    # menu_button_params = (c.menu_button_width, c.menu_button_height)
 
     def __init__(self):
         self.main_menu = None
@@ -20,7 +19,7 @@ class Menus:
     def current_buttons(self):
         return self.state.buttons
 
-    #current_button = property()
+    # current_button = property()
 
     @property
     def current_button(self):
