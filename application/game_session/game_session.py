@@ -74,7 +74,7 @@ class ShowMenuGameSessionState(AbstractGameSessionState):
         if status == "up":
             self.session.finish()
 
-    def handle_mouse_move(self, pos: tuple[int]):
+    def handle_mouse_move(self, pos):
         for obj in self.session.menus.current_buttons:
             if obj.bounds.collidepoint(pos):
                 obj.hover()

@@ -1,5 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
+import pygame
+
 
 class AbstractButtonState(metaclass=ABCMeta):
     def __init__(self, button):

@@ -7,8 +7,6 @@ __all__ = ["Menus"]
 
 
 class Menus:
-    # menu_button_params = (c.menu_button_width, c.menu_button_height)
-
     def __init__(self):
         self.main_menu = None
         self.img = None
@@ -18,8 +16,6 @@ class Menus:
     @property
     def current_buttons(self):
         return self.state.buttons
-
-    # current_button = property()
 
     @property
     def current_button(self):
@@ -43,11 +39,8 @@ class Menus:
 
 
 class MainMenu:
-    menu_button_params = (c.menu_button_width, c.menu_button_height)
-    main_menu_objects: list[Button] = []
-    current_button = 0
-
     def __init__(self):
+        self.menu_button_params = (c.menu_button_width, c.menu_button_height)
         self.current_button = 0
         self.img = None
         self.game_session = None
