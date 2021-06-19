@@ -1,7 +1,5 @@
 from abc import ABCMeta, abstractmethod
 
-import pygame
-
 
 class AbstractButtonState(metaclass=ABCMeta):
     def __init__(self, button):
@@ -29,4 +27,14 @@ class AbstractButtonState(metaclass=ABCMeta):
 
     @abstractmethod
     def press_return(self):
+        pass
+
+
+class AbstractMenu(metaclass=ABCMeta):
+    @abstractmethod
+    def create_menu(self, session):
+        pass
+
+    @abstractmethod
+    def create_background(self):
         pass

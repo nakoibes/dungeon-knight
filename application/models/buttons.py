@@ -4,7 +4,7 @@ from application.game_session.base_game_session_state import AbstractGameSession
 from application.models.text_object import TextObject
 from application.config import Config as c
 from abc import abstractmethod, ABCMeta
-from application.models.base_game_button_state import AbstractButtonState
+from application.models.base_models import AbstractButtonState
 
 __all__ = ["PlayButton", "AutoPlayButton", "QuitButton", "Button"]
 

@@ -39,8 +39,7 @@ class Application:
         exit(0)
 
     def create_objects(self):
-        self._menus.create_menus()
-        self._menus.set_game_session(self._game_session)
+        self._menus.create_menus(self._game_session)
 
     def handle_mouse_event(self, event):
         self._game_session.handle_mouse(self.pygame_mouse_buttons_dict.get(event.type), event.pos)
