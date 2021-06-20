@@ -29,6 +29,18 @@ class AbstractButtonState(metaclass=ABCMeta):
     def press_return(self):
         pass
 
+    @abstractmethod
+    def next_button(self):
+        pass
+
+    @abstractmethod
+    def prev_button(self):
+        pass
+
+    @abstractmethod
+    def is_current(self) -> bool:
+        pass
+
 
 class AbstractMenu(metaclass=ABCMeta):
     @abstractmethod

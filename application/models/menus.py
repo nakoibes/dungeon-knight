@@ -2,7 +2,9 @@ from application.config import Config as c
 from application.models.base_models import AbstractMenu
 
 from application.service import create_sprite
-from application.models.buttons import PlayButton, AutoPlayButton, QuitButton, Button
+from application.models.buttons import PlayButton, AutoPlayButton, QuitButton
+
+from application.service.linked_list import DoubleLinkedList
 
 __all__ = ["Menus"]
 
@@ -19,15 +21,8 @@ class Menus:
     def current_buttons(self):
         return self.state.buttons
 
-    @property
-    def current_button(self):
-        return self.state.current_button
-
-    @current_button.setter
-    def current_button(self, current_button):
-        self.state.current_button = current_button
-
     def create_menus(self, session):
+        # self.set_game_session(session)
         self.main_menu = MainMenu()
         self.menus.extend([self.main_menu])
         for menu in self.menus:
@@ -44,7 +39,6 @@ class Menus:
 class MainMenu(AbstractMenu):
     def __init__(self):
         self.menu_button_params = (c.menu_button_width, c.menu_button_height)
-        self.current_button = 0
         self.img = None
         self.game_session = None
         self.buttons = None
@@ -52,11 +46,13 @@ class MainMenu(AbstractMenu):
     def create_menu(self, session):
         self.set_game_session(session)
         self.create_background()
-        self.buttons = [
-            PlayButton("Играть", self.menu_button_params, (300, 200), self, state="current"),
-            AutoPlayButton("Автоигра", self.menu_button_params, (300, 270), self),
-            QuitButton("Выход", self.menu_button_params, (300, 340), self),
-        ]
+        self.buttons = DoubleLinkedList(
+            [
+                PlayButton("Играть", self.menu_button_params, (300, 200), self, state="current"),
+                AutoPlayButton("Автоигра", self.menu_button_params, (300, 270), self),
+                QuitButton("Выход", self.menu_button_params, (300, 340), self),
+            ]
+        )
 
     def create_background(self):
         self.img = create_sprite(c.menu_texture, c.SCREEN_RESOLUTION)

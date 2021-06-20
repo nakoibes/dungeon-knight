@@ -59,10 +59,13 @@ class ShowMenuGameSessionState(AbstractGameSessionState):
 
     def handle_return(self, status: str):
         if status == "up":
-            self.session.menus.current_buttons[self.session.menus.current_button].click(self)
-            self.session.menus.current_buttons[self.session.menus.current_button].free()
+            for obj in self.session.menus.current_buttons:
+                obj.free()
+                obj.remove()
+
         elif status == "down":
-            self.session.menus.current_buttons[self.session.menus.current_button].press_return()
+            for obj in self.session.menus.current_buttons:
+                obj.press_return()
 
     def draw(self, display: pygame.Surface):
         self._chain.draw(display)
@@ -92,24 +95,20 @@ class ShowMenuGameSessionState(AbstractGameSessionState):
             obj.free()
 
     def handle_key_up(self, status: str):
-        length = len(self.session.menus.current_buttons)
+        button = None
         if status == "down":
-            prev = (self.session.menus.current_button - 1) % length
-            obj = self.session.menus.current_buttons[self.session.menus.current_button]
-            obj.remove()
-            obj.remove_current()
-            self.session.menus.current_buttons[prev].hover()
-            self.session.menus.current_button = prev
+            for obj in self.session.menus.current_buttons:
+                if obj.is_current:
+                    button = obj
+            button.prev_button()
 
     def handle_key_down(self, status: str):
-        length = len(self.session.menus.current_buttons)
+        button = None
         if status == "down":
-            next_ = (self.session.menus.current_button + 1) % length
-            obj = self.session.menus.current_buttons[self.session.menus.current_button]
-            obj.remove()
-            obj.remove_current()
-            self.session.menus.current_buttons[next_].hover()
-            self.session.menus.current_button = next_
+            for obj in self.session.menus.current_buttons:
+                if obj.is_current:
+                    button = obj
+            button.next_button()
 
 
 # class OnPlayGameSessionState(AbstractGameSessionState):

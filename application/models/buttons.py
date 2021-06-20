@@ -6,16 +6,17 @@ from application.config import Config as c
 from abc import abstractmethod, ABCMeta
 from application.models.base_models import AbstractButtonState
 
-__all__ = ["PlayButton", "AutoPlayButton", "QuitButton", "Button"]
+
+# __all__ = ["PlayButton", "AutoPlayButton", "QuitButton", "Button"]
 
 
 class Button(metaclass=ABCMeta):
     def __init__(self, text, params, position, menu, state="normal"):
         self.menu = menu
-        self.normal_state = NormalState(self)
-        self.hover_state = HoverState(self)
-        self.pressed_state = PressedState(self)
-        self.current_state = CurrentButtonState(self)
+        # self.normal_state = NormalState(self)
+        # self.hover_state = HoverState(self)
+        # self.pressed_state = PressedState(self)
+        # self.current_state = CurrentButtonState(self)
         self.state = self.init_state(state)
         self.bounds = pygame.rect.Rect(position[0], position[1], params[0], params[1])
         self.position = position
@@ -23,18 +24,20 @@ class Button(metaclass=ABCMeta):
             position, lambda: text, c.button_text_color, c.font_name, c.font_size, params, centralized=True
         )
         self.params = params
+        self.prev = None
+        self.next = None
 
     def get_normal_state(self):
-        return self.normal_state
+        return NormalState(self)
 
     def get_hover_state(self):
-        return self.hover_state
+        return HoverState(self)
 
     def get_pressed_state(self):
-        return self.pressed_state
+        return PressedState(self)
 
     def get_current_state(self):
-        return self.current_state
+        return CurrentButtonState(self)
 
     def set_state(self, state: AbstractButtonState):
         self.state = state
@@ -59,8 +62,21 @@ class Button(metaclass=ABCMeta):
 
     def init_state(self, state: str):
         return dict(
-            normal=self.normal_state, hover=self.hover_state, pressed=self.pressed_state, current=self.current_state
+            normal=NormalState(self),
+            hover=HoverState(self),
+            pressed=PressedState(self),
+            current=CurrentButtonState(self),
         )[state]
+
+    def next_button(self):
+        self.state.next_button()
+
+    def prev_button(self):
+        self.state.prev_button()
+
+    @property
+    def is_current(self) -> bool:
+        return self.state.is_current()
 
     @abstractmethod
     def click(self, state: AbstractGameSessionState):
@@ -131,6 +147,15 @@ class NormalState(AbstractButtonState):
     def press_return(self):
         pass
 
+    def next_button(self):
+        pass
+
+    def prev_button(self):
+        pass
+
+    def is_current(self) -> bool:
+        return False
+
 
 class HoverState(AbstractButtonState):
     def __init__(self, button: Button):
@@ -154,6 +179,15 @@ class HoverState(AbstractButtonState):
 
     def press_return(self):
         self.button.set_state(self.button.get_pressed_state())
+
+    def next_button(self):
+        pass
+
+    def prev_button(self):
+        pass
+
+    def is_current(self) -> bool:
+        return False
 
 
 class PressedState(AbstractButtonState):
@@ -180,6 +214,17 @@ class PressedState(AbstractButtonState):
     def press_return(self):
         pass
 
+    def next_button(self):
+        self.button.set_state(self.button.get_normal_state())
+        self.button.next.set_state(self.button.next.get_current_state())
+
+    def prev_button(self):
+        self.button.set_state(self.button.get_normal_state())
+        self.button.prev.set_state(self.button.prev.get_current_state())
+
+    def is_current(self) -> bool:
+        return True
+
 
 class CurrentButtonState(AbstractButtonState):
     def __init__(self, button: Button):
@@ -203,3 +248,14 @@ class CurrentButtonState(AbstractButtonState):
 
     def press_return(self):
         self.button.set_state(self.button.get_pressed_state())
+
+    def next_button(self):
+        self.button.set_state(self.button.get_normal_state())
+        self.button.next.set_state(self.button.next.get_current_state())
+
+    def prev_button(self):
+        self.button.set_state(self.button.get_normal_state())
+        self.button.prev.set_state(self.button.prev.get_current_state())
+
+    def is_current(self) -> bool:
+        return True
