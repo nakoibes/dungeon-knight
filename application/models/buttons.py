@@ -13,10 +13,6 @@ from application.models.base_models import AbstractButtonState
 class Button(metaclass=ABCMeta):
     def __init__(self, text, params, position, menu, state="normal"):
         self.menu = menu
-        # self.normal_state = NormalState(self)
-        # self.hover_state = HoverState(self)
-        # self.pressed_state = PressedState(self)
-        # self.current_state = CurrentButtonState(self)
         self.state = self.init_state(state)
         self.bounds = pygame.rect.Rect(position[0], position[1], params[0], params[1])
         self.position = position

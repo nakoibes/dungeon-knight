@@ -4,7 +4,7 @@ from typing import Callable
 
 import pygame
 from application.game_session.base_game_session_state import AbstractGameSessionState
-from application.models import Menus
+from application.models import Menus, Button
 from application.screen_chain import ScreenHandler
 
 
@@ -100,7 +100,8 @@ class ShowMenuGameSessionState(AbstractGameSessionState):
             for obj in self.session.menus.current_buttons:
                 if obj.is_current:
                     button = obj
-            button.prev_button()
+            if button:
+                button.prev_button()
 
     def handle_key_down(self, status: str):
         button = None
@@ -108,7 +109,8 @@ class ShowMenuGameSessionState(AbstractGameSessionState):
             for obj in self.session.menus.current_buttons:
                 if obj.is_current:
                     button = obj
-            button.next_button()
+            if button:
+                button.next_button()
 
 
 # class OnPlayGameSessionState(AbstractGameSessionState):
