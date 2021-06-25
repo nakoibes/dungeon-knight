@@ -3,21 +3,26 @@ import pygame
 __all__ = ["Application"]
 
 from application.config import Config
-from application.engine import Engine
-from application.screen_chain import ScreenHandle, MenuHandler
+from application.game_session import GameSession
+from application.screen_chain import ScreenHandler, MenuHandler
 from application.models import Menus
+from application.vocabulary import KEYBOARD_MAPPING, MOUSE_MAPPING
 
 
 class Application:
     def __init__(self, name: str, config: Config):
+        self.pygame_mouse_buttons_dict = MOUSE_MAPPING
+        self.pygame_keyboard_keys_dict = KEYBOARD_MAPPING
         self._name = name
-        self._engine = Engine()
-        self._menus = Menus(self._engine)
+        self._menus = Menus()
         self._screen_resolution = (0, 0)
         if config:
             self.config_from_object(config)
-        self._chain = MenuHandler(self._screen_resolution, pygame.SRCALPHA, self._menus, (0, 0), ScreenHandle((0, 0)))
-        self._chain.connect_engine(self._engine)
+        self.menu_chain = MenuHandler(
+            self._screen_resolution, pygame.SRCALPHA, self._menus, (0, 0), ScreenHandler((0, 0))
+        )
+        self._game_session = GameSession(self.menu_chain, self._menus)
+
         self._game_display = pygame.display.set_mode(self._screen_resolution)
 
     def config_from_object(self, config: Config):
@@ -34,49 +39,32 @@ class Application:
         exit(0)
 
     def create_objects(self):
-        self._menus.create_menus()
+        self._menus.create_menus(self._game_session)
 
     def handle_mouse_event(self, event):
-        if event.type == pygame.MOUSEMOTION:
-            self._engine.handle_mouse_move(event.pos)
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            self._engine.handle_mouse_down(event.pos)
-        elif event.type == pygame.MOUSEBUTTONUP:
-            self._engine.handle_mouse_up()
+        self._game_session.handle_mouse(self.pygame_mouse_buttons_dict.get(event.type), event.pos)
 
-    def handle_key_event(self, event):
-        pass
-
-    def handle_menu(self, event):
-        if self._engine.show_menu:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    self._engine.prev_menu_button()
-                elif event.key == pygame.K_DOWN:
-                    self._engine.next_menu_button()
-                elif event.key == pygame.K_RETURN:
-                    self._engine.menu_objects[self._engine.current_button].state = "pressed"  # FIXME
-            elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_RETURN:
-                    self._engine.menu_objects[self._engine.current_button].state = "hover"
-                    self._engine.menu_objects[self._engine.current_button].click(self._engine)
+    def handle_keyboard_key_event(self, event: pygame.event.Event):
+        if event.type == pygame.KEYDOWN:
+            self._game_session.handle_keyboard_key(self.pygame_keyboard_keys_dict.get(event.key, "no_key"), "down")
+        elif event.type == pygame.KEYUP:
+            self._game_session.handle_keyboard_key(self.pygame_keyboard_keys_dict.get(event.key, "no_key"), "up")
 
     def handle_events(self):
         for event in pygame.event.get():
-            self.handle_menu(event)
             if event.type == pygame.QUIT:
-                self._engine.game_over = True
-            elif event.type in (pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION):
+                self._game_session.finish()
+            elif event.type in self.pygame_mouse_buttons_dict.keys():
                 self.handle_mouse_event(event)
-            elif event.type in (pygame.KEYDOWN, pygame.KEYUP):
-                self.handle_key_event(event)
+            elif event.type in (pygame.KEYUP, pygame.KEYDOWN):
+                self.handle_keyboard_key_event(event)
 
     def run(self):
         self.open()
         self.create_objects()
-        while not self._engine.game_over:
-            self.handle_events()
-            self._game_display.blit(self._chain, (0, 0))
-            self._chain.draw(self._game_display)
+        while not self._game_session.end:
+            self._game_display.blit(self._game_session.state.get_chain(), (0, 0))
+            self._game_session.state.draw(self._game_display)
             pygame.display.update()
+            self.handle_events()
         self.close()

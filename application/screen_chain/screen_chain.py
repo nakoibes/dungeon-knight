@@ -1,11 +1,9 @@
 import pygame
 
-from application.engine import Engine
-
-__all__ = ["ScreenHandle", "MenuHandler"]
+__all__ = ["ScreenHandler", "MenuHandler"]
 
 
-class ScreenHandle(pygame.Surface):
+class ScreenHandler(pygame.Surface):
     def __init__(self, *args, **kwargs):
         self.engine = None
         if len(args) > 1:
@@ -22,32 +20,23 @@ class ScreenHandle(pygame.Surface):
             canvas.blit(self.successor, self.next_coord)
             self.successor.draw(canvas)
 
-    def connect_engine(self, engine: Engine):
-        if self.successor is not None:
-            self.successor.connect_engine(engine)
 
-
-class MenuHandler(ScreenHandle):
+class MenuHandler(ScreenHandler):
     def __init__(self, *args, **kwargs):
         self.menus = args[-3]
         args = args[:-3] + args[-2:]
         super().__init__(*args, **kwargs)
 
-    def connect_engine(self, engine: Engine):
-        self.engine = engine
-        super().connect_engine(engine)
-
     def draw_background(self):
-        self.blit(self.menus.img, (0, 0))
+        self.blit(self.menus.state.img, (0, 0))
 
     def draw_buttons(self):
-        for obj in self.menus.main_menu_objects:
-            pygame.draw.rect(self, obj.back_color, (obj.position[0], obj.position[1], obj.params[0], obj.params[1]))
+        for obj in self.menus.current_buttons:
+            pygame.draw.rect(self, obj.state.color, (obj.position[0], obj.position[1], obj.params[0], obj.params[1]))
             self.blit(obj.text.text_surface, obj.text.position)
 
     def draw(self, canvas: pygame.Surface):
-        if self.engine.show_menu:
-            self.draw_background()
-            self.draw_buttons()
+        self.draw_background()
+        self.draw_buttons()
 
         super().draw(canvas)
